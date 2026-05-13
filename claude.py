@@ -19,57 +19,62 @@ def research_company(company_name: str) -> dict:
     
     client = anthropic.Anthropic(api_key=api_key)
     
-    prompt = f"""Research the company "{company_name}" thoroughly using web search.
+    prompt = f"""Research the company "{company_name}" thoroughly using web search. You MUST provide detailed factual information for each field.
 
-Return ONLY a valid JSON object with these exact fields:
+Return ONLY a valid JSON object with EXACTLY these fields (use "Unknown" if unavailable, NEVER null):
 
-1. SNAPSHOT (company facts):
-   - tagline: one-line description of what company does
-   - headquarters: city, state/country
-   - industry: sector or market category
-   - founded: 4-digit year
-   - size: approximate employee count (e.g., "200-500")
+{{
+  "snapshot": {{
+    "tagline": "one-line what they do",
+    "headquarters": "City, Country",
+    "industry": "market category",
+    "founded": "YYYY",
+    "size": "employee range like 100-500"
+  }},
+  "business_model": {{
+    "revenue_model": "SaaS/marketplace/ads/etc",
+    "target_customers": "B2B/B2C/enterprise/SMB",
+    "pricing": "how they charge",
+    "concentration": "Diversified or specific focus"
+  }},
+  "tech_stack": {{
+    "frontend": ["React", "Vue", "or similar"],
+    "backend": ["Python", "Node.js", "or similar"],
+    "cloud": ["AWS", "GCP", "or similar"],
+    "databases": ["PostgreSQL", "MongoDB", "or similar"],
+    "tools": ["Slack", "Salesforce", "or similar"]
+  }},
+  "recent_news": [
+    {{"title": "headline", "source": "TechCrunch", "date": "YYYY-MM-DD", "link": "url or null", "summary": "1-2 sentences"}}
+  ],
+  "interview_intelligence": {{
+    "engineering_focus_areas": ["topic1", "topic2", "topic3", "topic4"],
+    "behavioral_themes": ["theme1", "theme2", "theme3", "theme4"],
+    "maturity_indicators": "description of company stage",
+    "culture_notes": "key cultural indicators",
+    "preparation_tips": ["tip1", "tip2", "tip3", "tip4", "tip5"]
+  }},
+  "risk_watchlist": {{
+    "layoffs": "Recent layoffs or None",
+    "funding": "latest round or Profitable",
+    "competition": "competitive position",
+    "product": "market fit assessment",
+    "legal": "legal issues or None known"
+  }}
+}}
 
-2. BUSINESS_MODEL:
-   - revenue_model: SaaS, marketplace, advertising, etc.
-   - target_customers: B2B, B2C, enterprise, SMB, etc.
-   - pricing: description of pricing approach
-   - concentration: if known, customer concentration (e.g., "Diversified", "Fortune 500-focused")
+CRITICAL RULES:
+1. Return ONLY valid JSON - no markdown, no backticks, no explanation
+2. EVERY field must have a value - use "Unknown" never null
+3. Arrays must have at least 3-5 items each
+4. For recent_news, include actual recent articles if found
+5. Be specific about {company_name} - not generic
 
-3. TECH_STACK (categorized):
-   - frontend: list of frontend technologies
-   - backend: list of backend technologies
-   - cloud: list of cloud providers/services
-   - databases: list of databases/data stores
-   - tools: list of SaaS tools (Salesforce, HubSpot, Slack, etc.)
-
-4. RECENT_NEWS (max 4 items, each with):
-   - title: news headline
-   - source: where news came from (TechCrunch, Company Blog, etc.)
-   - date: YYYY-MM-DD format
-   - link: URL if available, else null
-   - summary: 1-2 sentence summary
-
-5. INTERVIEW_INTELLIGENCE (predict what they'll ask):
-   - engineering_focus_areas: list of likely technical interview topics (max 4)
-   - behavioral_themes: list of likely behavioral themes (max 4)
-   - maturity_indicators: brief description of company stage
-   - culture_notes: key cultural indicators
-   - preparation_tips: list of specific things to study (max 5)
-
-6. RISK_WATCHLIST (real, factual risks only):
-   - layoffs: "None recent" or description
-   - funding: latest funding round, runway if known
-   - competition: competitive position
-   - product: product market fit indicators
-   - legal: any known legal/compliance issues
-
-CRITICAL: Return ONLY valid JSON. No markdown, no backticks, no language identifier, no explanation.
-All fields required (use null or "Unknown" if no data available)."""
+Start your response with {{ and end with }}. Nothing else."""
 
     response = client.messages.create(
         model="claude-opus-4-1",
-        max_tokens=2048,
+        max_tokens=3000,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
         messages=[{"role": "user", "content": prompt}]
     )
@@ -80,24 +85,46 @@ All fields required (use null or "Unknown" if no data available)."""
         if hasattr(block, "text"):
             text_content += block.text
     
-    # Strip markdown backticks if present
+    logger.debug(f"Raw Claude response: {text_content[:500]}...")
+    
+    # Strip markdown backticks and language identifiers
     text_content = text_content.strip()
+    
+    # Remove markdown code blocks if present
     if text_content.startswith("```"):
-        # Remove opening markdown fence
-        text_content = text_content.split("```", 1)[1]
+        text_content = text_content.lstrip("`")
+        # Remove language identifier (json, python, etc.)
+        lines = text_content.split('\n', 1)
+        if len(lines) > 1 and lines[0].strip().lower() in ('json', 'python', 'text', ''):
+            text_content = lines[1]
+        text_content = text_content.rstrip("`").strip()
     
-    # Strip language identifier (e.g. "json") if present on first line
-    lines = text_content.split('\n')
-    if lines[0].strip().lower() in ('json', 'python', ''):
-        text_content = '\n'.join(lines[1:])
+    # Find JSON object boundaries
+    start_idx = text_content.find('{')
+    end_idx = text_content.rfind('}')
     
-    if text_content.endswith("```"):
-        # Remove closing markdown fence
-        text_content = text_content.rsplit("```", 1)[0]
+    if start_idx != -1 and end_idx != -1:
+        text_content = text_content[start_idx:end_idx+1]
     
-    text_content = text_content.strip()
+    logger.debug(f"Cleaned JSON: {text_content[:300]}...")
     
     try:
-        return json.loads(text_content)
+        result = json.loads(text_content)
+        # Ensure all required fields exist with defaults
+        if 'snapshot' not in result:
+            result['snapshot'] = {}
+        if 'business_model' not in result:
+            result['business_model'] = {}
+        if 'tech_stack' not in result:
+            result['tech_stack'] = {'frontend': [], 'backend': [], 'cloud': [], 'databases': [], 'tools': []}
+        if 'recent_news' not in result:
+            result['recent_news'] = []
+        if 'interview_intelligence' not in result:
+            result['interview_intelligence'] = {}
+        if 'risk_watchlist' not in result:
+            result['risk_watchlist'] = {}
+        return result
     except json.JSONDecodeError as e:
+        logger.error(f"JSON decode error: {e}")
+        logger.error(f"Failed content: {text_content}")
         raise ValueError(f"Failed to parse Claude response as JSON: {e}")
