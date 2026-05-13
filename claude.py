@@ -2,6 +2,10 @@ import anthropic
 from dotenv import load_dotenv
 import os
 import json
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -28,7 +32,7 @@ Return ONLY a valid JSON object with exactly these keys:
 Do not include any text outside the JSON object. No markdown, no backticks, no explanation."""
 
     response = client.messages.create(
-        model="claude-3-5-sonnet-20241022",
+        model="claude-opus-4-1",
         max_tokens=2048,
         tools=[{"type": "web_search_20250305", "name": "web_search"}],
         messages=[{"role": "user", "content": prompt}]
