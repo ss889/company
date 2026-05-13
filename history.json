@@ -1,1 +1,82 @@
-[]
+[
+  {
+    "id": "demo-stripe-2026",
+    "company_name": "Stripe",
+    "created_at": "2026-05-13T12:00:00Z",
+    "briefing": {
+      "snapshot": {
+        "tagline": "Online payment processing platform for the internet",
+        "headquarters": "San Francisco, California, USA",
+        "industry": "Financial Technology / Payments",
+        "founded": "2010",
+        "size": "5000-10000"
+      },
+      "business_model": {
+        "revenue_model": "Transaction fees (2.9% + $0.30 per charge)",
+        "target_customers": "E-commerce, SaaS, Marketplaces, Enterprises",
+        "pricing": "Pay-as-you-go model with volume discounts",
+        "concentration": "Diversified across industries and geographies"
+      },
+      "tech_stack": {
+        "frontend": ["React", "TypeScript", "Next.js", "Redux"],
+        "backend": ["Go", "Java", "Python", "Node.js"],
+        "cloud": ["AWS", "GCP"],
+        "databases": ["PostgreSQL", "Redis", "DynamoDB"],
+        "tools": ["Kafka", "Datadog", "PagerDuty", "Slack"]
+      },
+      "recent_news": [
+        {
+          "title": "Stripe raises $1.3B in Series H funding",
+          "source": "TechCrunch",
+          "date": "2024-09-15",
+          "link": "https://techcrunch.com",
+          "summary": "Stripe raises additional funding at $65 billion valuation, expanding payment infrastructure capabilities globally."
+        },
+        {
+          "title": "Stripe launches AI-powered fraud detection tools",
+          "source": "The Verge",
+          "date": "2024-10-20",
+          "link": "https://theverge.com",
+          "summary": "New machine learning models reduce fraud while maintaining user experience and lowering false positives."
+        },
+        {
+          "title": "Stripe expands into emerging markets",
+          "source": "Financial Times",
+          "date": "2024-11-05",
+          "link": "https://ft.com",
+          "summary": "Stripe launches payment services in 15 new countries to support global commerce growth."
+        }
+      ],
+      "interview_intelligence": {
+        "engineering_focus_areas": [
+          "Payment processing systems and financial infrastructure",
+          "Distributed systems design and scalability at billions of transactions",
+          "Security, PCI DSS compliance, and fraud prevention",
+          "Real-time systems and low-latency API design"
+        ],
+        "behavioral_themes": [
+          "Problem-solving with complex constraints",
+          "Customer empathy and developer experience focus",
+          "Ownership and end-to-end responsibility",
+          "Cross-functional collaboration"
+        ],
+        "maturity_indicators": "Mature, profitable fintech leader with global operations and IPO trajectory",
+        "culture_notes": "Engineering-focused company with strong emphasis on documentation, developer experience, and building for scale. Fast-paced, collaborative environment with focus on shipping quality features.",
+        "preparation_tips": [
+          "Study payment flows and settlement processes",
+          "Review PCI DSS requirements and security standards",
+          "Understand API design patterns and REST best practices",
+          "Be prepared for system design questions about scaling to billions of transactions",
+          "Research Stripe's product roadmap and competitive landscape"
+        ]
+      },
+      "risk_watchlist": {
+        "layoffs": "None reported in 2024-2025",
+        "funding": "Well-funded, Series H completed 2024, path to IPO clear",
+        "competition": "Square (Block), PayPal, Adyen competing for market share",
+        "product": "Market leader in online payments with strong moat",
+        "legal": "Subject to payment processing regulations in all markets, ongoing compliance focus"
+      }
+    }
+  }
+]
