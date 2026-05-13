@@ -34,8 +34,13 @@ async def generate_briefing(request: BriefRequest):
     
     company_name = request.company_name.strip()
     
-    # Research the company
-    briefing = claude.research_company(company_name)
+    try:
+        # Research the company
+        briefing = claude.research_company(company_name)
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail={"error": str(e)})
+    except Exception as e:
+        raise HTTPException(status_code=500, detail={"error": f"Failed to research company: {str(e)}"})
     
     # Create a history entry
     entry = {

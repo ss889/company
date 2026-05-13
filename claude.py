@@ -7,19 +7,13 @@ load_dotenv()
 
 
 def research_company(company_name: str) -> dict:
-    """Research a company using Claude with web search enabled.
+    """Research a company using Claude with web search enabled."""
+    api_key = os.getenv("ANTHROPIC_API_KEY")
     
-    Args:
-        company_name (str): The name of the company to research.
-        
-    Returns:
-        dict: A briefing dict with keys: summary, tech_stack, recent_news,
-              strategic_priorities, interview_questions, culture_notes.
-              
-    Raises:
-        ValueError: If the response cannot be parsed as JSON.
-    """
-    client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+    if not api_key:
+        raise ValueError("ANTHROPIC_API_KEY environment variable not set")
+    
+    client = anthropic.Anthropic(api_key=api_key)
     
     prompt = f"""Research the company "{company_name}" thoroughly using web search.
 
