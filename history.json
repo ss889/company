@@ -68,6 +68,15 @@
           "Understand API design patterns and REST best practices",
           "Be prepared for system design questions about scaling to billions of transactions",
           "Research Stripe's product roadmap and competitive landscape"
+        ],
+        "interview_questions": [
+          "Design a payment processing system that handles 100,000 transactions per second with exactly-once delivery semantics.",
+          "How would you detect and prevent fraudulent transactions in real-time without impacting legitimate customer experience?",
+          "Describe how you'd handle reconciliation between Stripe's systems and partner banks across different timezones.",
+          "What's your approach to maintaining backward compatibility while evolving payment APIs used by thousands of companies?",
+          "Tell us about a time you had to optimize a critical path in production. Walk us through your debugging process.",
+          "How would you architect a system for handling payment disputes and chargebacks at scale?",
+          "Describe your experience with distributed systems. What failure modes concern you most?"
         ]
       },
       "risk_watchlist": {

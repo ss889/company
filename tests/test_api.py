@@ -83,6 +83,15 @@ FAKE_BRIEFING = {
             "Prepare examples of scaling systems from your own experience",
             "Think about questions on how they approach cross-functional work",
             "Review their tech stack and why those choices make sense for their use case"
+        ],
+        "interview_questions": [
+            "Design a scalable notification system that delivers recognition updates to thousands of users in real-time across multiple channels (email, Slack, SMS).",
+            "How would you approach building integrations with third-party APIs (Salesforce, Slack, HubSpot) while maintaining reliability and security?",
+            "Tell us about a time you optimized a slow database query in production. What was your approach?",
+            "Describe how you would build and maintain an analytics pipeline to track user engagement metrics across the platform.",
+            "Walk us through how you would implement a feature flag system to safely roll out new features to enterprise customers.",
+            "How would you ensure data consistency when a recognition is created, processed, and delivered across multiple systems?",
+            "What's your experience with event-driven architectures? How would you use them to decouple services?"
         ]
     },
     "risk_watchlist": {

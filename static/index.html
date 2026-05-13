@@ -805,6 +805,10 @@
                             <h4>Preparation Tips</h4>
                             <ol class="briefing-list" id="preparationTips"></ol>
                         </div>
+                        <div class="intelligence-subsection">
+                            <h4>Sample Interview Questions</h4>
+                            <ol class="briefing-list" id="interviewQuestions"></ol>
+                        </div>
                     </div>
                 </div>
 
@@ -1018,6 +1022,9 @@
                 document.getElementById('cultureNotes').textContent = briefing.interview_intelligence.culture_notes || '—';
                 document.getElementById('preparationTips').innerHTML = (briefing.interview_intelligence.preparation_tips || []).map(tip => 
                     `<li>${tip}</li>`
+                ).join('');
+                document.getElementById('interviewQuestions').innerHTML = (briefing.interview_intelligence.interview_questions || []).map(question => 
+                    `<li>${question}</li>`
                 ).join('');
             }
 

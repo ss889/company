@@ -67,7 +67,8 @@ Return ONLY a valid JSON object with EXACTLY these fields (use "Unknown" if unav
     "behavioral_themes": ["theme1", "theme2", "theme3", "theme4"],
     "maturity_indicators": "description of company stage",
     "culture_notes": "key cultural indicators",
-    "preparation_tips": ["tip1", "tip2", "tip3", "tip4", "tip5"]
+    "preparation_tips": ["tip1", "tip2", "tip3", "tip4", "tip5"],
+    "interview_questions": ["realistic question 1", "realistic question 2", "realistic question 3", "realistic question 4", "realistic question 5", "realistic question 6", "realistic question 7"]
   }},
   "risk_watchlist": {{
     "layoffs": "Recent layoffs or None",
@@ -158,7 +159,8 @@ Return ONLY a valid JSON object with EXACTLY these fields (use "Unknown" if unav
     "behavioral_themes": ["theme1", "theme2", "theme3", "theme4"],
     "maturity_indicators": "description of company stage",
     "culture_notes": "key cultural indicators",
-    "preparation_tips": ["tip1", "tip2", "tip3", "tip4", "tip5"]
+    "preparation_tips": ["tip1", "tip2", "tip3", "tip4", "tip5"],
+    "interview_questions": ["realistic question 1", "realistic question 2", "realistic question 3", "realistic question 4", "realistic question 5", "realistic question 6", "realistic question 7"]
   }},
   "risk_watchlist": {{
     "layoffs": "Recent layoffs or None",
