@@ -21,15 +21,51 @@ def research_company(company_name: str) -> dict:
     
     prompt = f"""Research the company "{company_name}" thoroughly using web search.
 
-Return ONLY a valid JSON object with exactly these keys:
-- summary: one paragraph describing what the company does, who they serve, and their business model
-- tech_stack: list of technologies, tools, or platforms they use or build with
-- recent_news: list of up to 4 recent notable events, launches, or announcements
-- strategic_priorities: list of up to 4 things the company is clearly focused on right now
-- interview_questions: list of exactly 3 smart, specific questions a candidate should ask in an interview
-- culture_notes: one paragraph describing their work culture, values, or team environment
+Return ONLY a valid JSON object with these exact fields:
 
-Do not include any text outside the JSON object. No markdown, no backticks, no explanation."""
+1. SNAPSHOT (company facts):
+   - tagline: one-line description of what company does
+   - headquarters: city, state/country
+   - industry: sector or market category
+   - founded: 4-digit year
+   - size: approximate employee count (e.g., "200-500")
+
+2. BUSINESS_MODEL:
+   - revenue_model: SaaS, marketplace, advertising, etc.
+   - target_customers: B2B, B2C, enterprise, SMB, etc.
+   - pricing: description of pricing approach
+   - concentration: if known, customer concentration (e.g., "Diversified", "Fortune 500-focused")
+
+3. TECH_STACK (categorized):
+   - frontend: list of frontend technologies
+   - backend: list of backend technologies
+   - cloud: list of cloud providers/services
+   - databases: list of databases/data stores
+   - tools: list of SaaS tools (Salesforce, HubSpot, Slack, etc.)
+
+4. RECENT_NEWS (max 4 items, each with):
+   - title: news headline
+   - source: where news came from (TechCrunch, Company Blog, etc.)
+   - date: YYYY-MM-DD format
+   - link: URL if available, else null
+   - summary: 1-2 sentence summary
+
+5. INTERVIEW_INTELLIGENCE (predict what they'll ask):
+   - engineering_focus_areas: list of likely technical interview topics (max 4)
+   - behavioral_themes: list of likely behavioral themes (max 4)
+   - maturity_indicators: brief description of company stage
+   - culture_notes: key cultural indicators
+   - preparation_tips: list of specific things to study (max 5)
+
+6. RISK_WATCHLIST (real, factual risks only):
+   - layoffs: "None recent" or description
+   - funding: latest funding round, runway if known
+   - competition: competitive position
+   - product: product market fit indicators
+   - legal: any known legal/compliance issues
+
+CRITICAL: Return ONLY valid JSON. No markdown, no backticks, no language identifier, no explanation.
+All fields required (use null or "Unknown" if no data available)."""
 
     response = client.messages.create(
         model="claude-opus-4-1",

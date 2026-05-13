@@ -17,27 +17,83 @@ from main import app
 TEST_HISTORY_FILE = "test_history.json"
 
 
-# Fake briefing dict for mocking
+# Fake briefing dict for mocking - NEW STRUCTURE (Phase 1)
 FAKE_BRIEFING = {
-    "summary": "A fast-moving B2B SaaS platform for employee recognition and incentive management.",
-    "tech_stack": ["Python", "React", "PostgreSQL", "Salesforce", "HubSpot"],
+    "snapshot": {
+        "tagline": "B2B SaaS for employee recognition and incentive management",
+        "headquarters": "San Francisco, CA",
+        "industry": "HR Tech / Employee Engagement",
+        "founded": 2020,
+        "size": "100-200"
+    },
+    "business_model": {
+        "revenue_model": "SaaS subscription",
+        "target_customers": "Enterprise and mid-market (50-5000+ employees)",
+        "pricing": "Per-employee per-month model, typically $2-8/user",
+        "concentration": "Diversified across Fortune 500 and growth companies"
+    },
+    "tech_stack": {
+        "frontend": ["React", "TypeScript", "Tailwind CSS"],
+        "backend": ["Python", "Node.js", "Django"],
+        "cloud": ["AWS", "Google Cloud"],
+        "databases": ["PostgreSQL", "Redis"],
+        "tools": ["Salesforce", "Slack", "Stripe", "HubSpot"]
+    },
     "recent_news": [
-        "Raised Series B in March 2025",
-        "Launched Slack integration in Q1 2025",
-        "Expanded to 50+ enterprise clients"
+        {
+            "title": "Raises $15M Series B funding led by Accel Partners",
+            "source": "TechCrunch",
+            "date": "2025-03-15",
+            "link": "https://techcrunch.com/...",
+            "summary": "Giftogram announced Series B funding to expand product and go-to-market efforts."
+        },
+        {
+            "title": "Launches Native Slack Integration",
+            "source": "Company Blog",
+            "date": "2025-02-20",
+            "link": "https://blog.giftogram.com/...",
+            "summary": "Users can now manage recognition workflows directly from Slack."
+        },
+        {
+            "title": "Reaches 50+ Enterprise Customers",
+            "source": "LinkedIn",
+            "date": "2025-01-10",
+            "link": "https://linkedin.com/...",
+            "summary": "Giftogram celebrates milestone with major enterprises adopting the platform."
+        }
     ],
-    "strategic_priorities": [
-        "Expanding enterprise client base",
-        "AI-powered personalization of rewards",
-        "International market entry"
-    ],
-    "interview_questions": [
-        "How is the team currently using AI to improve the rewards workflow?",
-        "What does success look like in the first 90 days for this role?",
-        "How do you measure the impact of incentive campaigns for enterprise clients?"
-    ],
-    "culture_notes": "Fast-moving B2B team, emphasis on ownership and business outcomes. Strong engineering culture with regular feedback cycles."
+    "interview_intelligence": {
+        "engineering_focus_areas": [
+            "Scalability and performance at enterprise scale",
+            "Real-time notification systems and event streaming",
+            "Integration architecture with third-party APIs",
+            "Data analytics and reporting infrastructure"
+        ],
+        "behavioral_themes": [
+            "Ownership and accountability in building features",
+            "Cross-functional collaboration with product and customer success",
+            "Customer-first problem solving and empathy",
+            "Continuous learning and staying current with tech trends"
+        ],
+        "maturity_indicators": "Series B growth stage, rapidly expanding engineering team, focus on scaling and reliability",
+        "culture_notes": "High-paced startup culture, emphasis on ownership, transparent communication, customer focus. Regular feedback cycles and professional growth opportunities.",
+        "preparation_tips": [
+            "Study their recent funding announcement and what they plan to build",
+            "Research their product and try the demo or free trial",
+            "Prepare examples of scaling systems from your own experience",
+            "Think about questions on how they approach cross-functional work",
+            "Review their tech stack and why those choices make sense for their use case"
+        ]
+    },
+    "risk_watchlist": {
+        "layoffs": "None recent",
+        "funding": "Series B (March 2025) - strong runway estimated at 24-36 months",
+        "competition": "Moderate - competing with Bonusly, HeyTaco, other recognition platforms",
+        "product": "Strong product-market fit evidenced by customer growth and enterprise adoption",
+        "legal": "No known major legal or compliance issues"
+    }
 }
+
 
 
 @pytest.fixture(autouse=True)
@@ -82,14 +138,30 @@ def test_generate_briefing(mock_research, client):
     assert "created_at" in data
     assert "briefing" in data
     
-    # Verify briefing content
+    # Verify briefing content - NEW STRUCTURE
     assert data["company_name"] == "Giftogram"
-    assert data["briefing"]["summary"] == FAKE_BRIEFING["summary"]
-    assert data["briefing"]["tech_stack"] == FAKE_BRIEFING["tech_stack"]
-    assert data["briefing"]["recent_news"] == FAKE_BRIEFING["recent_news"]
-    assert data["briefing"]["strategic_priorities"] == FAKE_BRIEFING["strategic_priorities"]
-    assert data["briefing"]["interview_questions"] == FAKE_BRIEFING["interview_questions"]
-    assert data["briefing"]["culture_notes"] == FAKE_BRIEFING["culture_notes"]
+    assert "snapshot" in data["briefing"]
+    assert data["briefing"]["snapshot"]["headquarters"] == "San Francisco, CA"
+    assert "business_model" in data["briefing"]
+    assert "tech_stack" in data["briefing"]
+    assert "recent_news" in data["briefing"]
+    assert "interview_intelligence" in data["briefing"]
+    assert "risk_watchlist" in data["briefing"]
+    
+    # Verify tech_stack has categories
+    assert "frontend" in data["briefing"]["tech_stack"]
+    assert "backend" in data["briefing"]["tech_stack"]
+    
+    # Verify news has proper structure
+    assert isinstance(data["briefing"]["recent_news"], list)
+    if data["briefing"]["recent_news"]:
+        assert "title" in data["briefing"]["recent_news"][0]
+        assert "source" in data["briefing"]["recent_news"][0]
+        assert "date" in data["briefing"]["recent_news"][0]
+    
+    # Verify interview intelligence is a dict with subsections
+    assert "engineering_focus_areas" in data["briefing"]["interview_intelligence"]
+    assert "behavioral_themes" in data["briefing"]["interview_intelligence"]
     
     # Verify it was saved to history
     history = storage.load_history()
